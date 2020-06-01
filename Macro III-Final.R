@@ -108,3 +108,5 @@ plot(log(K_SWZ), type = "l")
 plot(log(Y_SWZ), type = "l")
 
 #Prueba gg
+
+## Holi besos 
