@@ -1,8 +1,7 @@
 #Macro III - Trabajo Final
 ##Lectura de datos####
-setwd("/Users/raul/Bases de datos/Macro III")
 library(readr)
-Datos <- read_delim("Trabajo_Final.csv", 
+Datos <- read_delim(file.choose(), 
                     ";", escape_double = FALSE, trim_ws = TRUE)
 View(Datos)
 
