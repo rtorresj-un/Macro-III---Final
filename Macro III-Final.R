@@ -133,5 +133,5 @@ for (i in 7:59) {
 
 plot.ts(GR_Y_COL, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 par(new=T)
-plot.ts(GR_FBKF_COL, type='l', col=c("#F07503C0"), ylab = NULL)
+plot.ts(GR_FBKF_COL, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - COL')
 
