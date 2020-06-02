@@ -5,7 +5,7 @@ Datos <- read_delim(file.choose(),
                     ";", escape_double = FALSE, trim_ws = TRUE)
 View(Datos)
 
-library(plm); library(tidyverse); library(strucchange)
+library(plm); library(tidyverse); library(strucchange); library(car)
 Datos <- pdata.frame(Datos)
 Datos <- Datos %>%
   group_by(Country)
@@ -40,19 +40,31 @@ InvGrowthLP_SWZ<- mean(InvGrowth_SWZ)
 cbind(InvGrowthLP_COL, InvGrowthLP_IRN, InvGrowthLP_TUR, InvGrowthLP_SWZ)
 
 #Capital####
-Ko_COL<- na.exclude(FBKF_COL/(InvGrowthLP_COL+Depre))[1]
-K_COL<- Ko_COL*(1-Depre)+FBKF_COL
+K_COL[6]<- na.exclude(FBKF_COL/(InvGrowthLP_COL+Depre))[1]
+for (i in 7:59) {
+  K_COL[i]<- K_COL[i-1]*(1-Depre)+FBKF_COL[i]
+  i+1
+}
 
-Ko_IRN<- na.exclude(FBKF_IRN/(InvGrowthLP_IRN+Depre))[1]
-K_IRN<- Ko_IRN*(1-Depre)+FBKF_IRN
+K_IRN[1]<- na.exclude(FBKF_IRN/(InvGrowthLP_IRN+Depre))[1]
+for (i in 2:59) {
+  K_IRN[i]<- K_IRN[i-1]*(1-Depre)+FBKF_IRN[i]
+  i+1
+}
 
-Ko_TUR<- na.exclude(FBKF_TUR/(InvGrowthLP_TUR+Depre))[1]
-K_TUR<- Ko_TUR*(1-Depre)+FBKF_TUR
+K_TUR[27]<- na.exclude(FBKF_TUR/(InvGrowthLP_TUR+Depre))[1]
+for (i in 28:59) {
+  K_TUR[i]<- K_TUR[i-1]*(1-Depre)+FBKF_TUR[i]
+  i+1
+}
 
-Ko_SWZ<- na.exclude(FBKF_SWZ/(InvGrowthLP_SWZ+Depre))[1]
-K_SWZ<- Ko_SWZ*(1-Depre)+FBKF_SWZ
+K_SWZ[11]<- na.exclude(FBKF_SWZ/(InvGrowthLP_SWZ+Depre))[1]
+for (i in 12:59) {
+  K_SWZ[i]<- K_SWZ[i-1]*(1-Depre)+FBKF_SWZ[i]
+  i+1
+}
 
-#Regresi?n del producto####
+#Regresión del producto####
 Y_COL<- subset(Datos, Country=="COL")$GDP
 L_COL<- subset(Datos, Country=="COL")$Pop
 Reg1_COL<- plm(log(Y_COL)~log(L_COL)+log(K_COL), data = Datos, model = "fd")
@@ -81,10 +93,10 @@ plot(log(K_IRN), type = "l")
 plot(log(Y_IRN), type = "l")
 sh79<- as.numeric(subset(Datos, Country=="IRN")$Year)>=19
 sh79<- as.numeric(sh79)
-linearHypothesis(Reg2_IRN, "log(L_IRN)+log(K_IRN)=1")
 
 Reg2_IRN<- plm(log(Y_IRN)~I(sh79)+log(L_IRN)+log(K_IRN), data = Datos, model = "fd")
 summary(Reg2_IRN)
+linearHypothesis(Reg2_IRN, "log(L_IRN)+log(K_IRN)=1")
 
 Y_TUR<- subset(Datos, Country=="TUR")$GDP
 L_TUR<- subset(Datos, Country=="TUR")$Pop
@@ -105,4 +117,21 @@ cusum.prueba4 = efp(log(Y_SWZ)~log(L_SWZ)+log(K_SWZ),type = "OLS-CUSUM")
 plot(cusum.prueba4)
 plot(log(K_SWZ), type = "l")
 plot(log(Y_SWZ), type = "l")
+linearHypothesis(Reg1_SWZ, "log(L_SWZ)+log(K_SWZ)=1")
+
+#Crecimiento de la inversión, producto y capital####
+GR_Y_COL<-NULL
+for (i in 2:59) {
+  GR_Y_COL[i]<- Y_COL[i]/Y_COL[i-1]-1
+  i+1
+}; GR_Y_COL<- ts(GR_Y_COL, start = 1960)
+GR_FBKF_COL<-NULL
+for (i in 7:59) {
+  GR_FBKF_COL[i]<- FBKF_COL[i]/FBKF_COL[i-1]-1
+  i+1
+}; GR_FBKF_COL<- ts(GR_FBKF_COL, start = 1965)
+
+plot.ts(GR_Y_COL, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
+par(new=T)
+plot.ts(GR_FBKF_COL, type='l', col=c("#F07503C0"), ylab = NULL)
 
