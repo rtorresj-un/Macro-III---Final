@@ -1,5 +1,5 @@
 #Macro III - Trabajo Final
-##LecTHAa de datos####
+##Lectura de datos####
 library(readr)
 Datos <- read_delim(file.choose(), 
                     ";", escape_double = FALSE, trim_ws = TRUE)
@@ -40,24 +40,28 @@ InvGrowthLP_SWZ<- mean(InvGrowth_SWZ)
 cbind(InvGrowthLP_COL, InvGrowthLP_IRN, InvGrowthLP_THA, InvGrowthLP_SWZ)
 
 #Capital####
+K_COL<- NULL
 K_COL[6]<- na.exclude(FBKF_COL/(InvGrowthLP_COL+Depre))[1]
 for (i in 7:59) {
   K_COL[i]<- K_COL[i-1]*(1-Depre)+FBKF_COL[i]
   i+1
 }
 
+K_IRN<- NULL
 K_IRN[1]<- na.exclude(FBKF_IRN/(InvGrowthLP_IRN+Depre))[1]
 for (i in 2:59) {
   K_IRN[i]<- K_IRN[i-1]*(1-Depre)+FBKF_IRN[i]
   i+1
 }
 
-K_THA[27]<- na.exclude(FBKF_THA/(InvGrowthLP_THA+Depre))[1]
-for (i in 28:59) {
+K_THA<- NULL
+K_THA[1]<- na.exclude(FBKF_THA/(InvGrowthLP_THA+Depre))[1]
+for (i in 2:59) {
   K_THA[i]<- K_THA[i-1]*(1-Depre)+FBKF_THA[i]
   i+1
 }
 
+K_SWZ <- NULL
 K_SWZ[11]<- na.exclude(FBKF_SWZ/(InvGrowthLP_SWZ+Depre))[1]
 for (i in 12:59) {
   K_SWZ[i]<- K_SWZ[i-1]*(1-Depre)+FBKF_SWZ[i]
@@ -134,4 +138,53 @@ for (i in 7:59) {
 plot.ts(GR_Y_COL, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 par(new=T)
 plot.ts(GR_FBKF_COL, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - COL')
+abline(a = 0,b = 0)
+
+GR_Y_IRN<-NULL
+for (i in 2:59) {
+  GR_Y_IRN[i]<- Y_IRN[i]/Y_IRN[i-1]-1
+  i+1
+}; GR_Y_IRN<- ts(GR_Y_IRN, start = 1960)
+GR_FBKF_IRN<-NULL
+for (i in 7:59) {
+  GR_FBKF_IRN[i]<- FBKF_IRN[i]/FBKF_IRN[i-1]-1
+  i+1
+}; GR_FBKF_IRN<- ts(GR_FBKF_IRN, start = 1965)
+
+plot.ts(GR_Y_IRN, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
+par(new=T)
+plot.ts(GR_FBKF_IRN, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - IRN')
+abline(a = 0,b = 0)
+
+GR_Y_THA<-NULL
+for (i in 2:59) {
+  GR_Y_THA[i]<- Y_THA[i]/Y_THA[i-1]-1
+  i+1
+}; GR_Y_THA<- ts(GR_Y_THA, start = 1960)
+GR_FBKF_THA<-NULL
+for (i in 7:59) {
+  GR_FBKF_THA[i]<- FBKF_THA[i]/FBKF_THA[i-1]-1
+  i+1
+}; GR_FBKF_THA<- ts(GR_FBKF_THA, start = 1965)
+
+plot.ts(GR_Y_THA, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
+par(new=T)
+plot.ts(GR_FBKF_THA, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - THA')
+abline(a = 0,b = 0)
+
+GR_Y_SWZ<-NULL
+for (i in 2:59) {
+  GR_Y_SWZ[i]<- Y_SWZ[i]/Y_SWZ[i-1]-1
+  i+1
+}; GR_Y_SWZ<- ts(GR_Y_SWZ, start = 1960)
+GR_FBKF_SWZ<-NULL
+for (i in 7:59) {
+  GR_FBKF_SWZ[i]<- FBKF_SWZ[i]/FBKF_SWZ[i-1]-1
+  i+1
+}; GR_FBKF_SWZ<- ts(GR_FBKF_SWZ, start = 1965)
+
+plot.ts(GR_Y_SWZ, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
+par(new=T)
+plot.ts(GR_FBKF_SWZ, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - SWZ')
+abline(a = 0,b = 0)
 
