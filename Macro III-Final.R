@@ -1,12 +1,12 @@
 #Macro III - Trabajo Final
-##Lectura de datos####
+##LecTHAa de datos####
 library(readr)
 Datos <- read_delim(file.choose(), 
                     ";", escape_double = FALSE, trim_ws = TRUE)
 View(Datos)
 
 library(plm); library(tidyverse); library(strucchange); library(car)
-Datos <- pdata.frame(Datos)
+Datos <- pdata.frame(Datos, index = c('Year', 'Country'))
 Datos <- Datos %>%
   group_by(Country)
 table(Datos$Country)
@@ -27,17 +27,17 @@ laggedFBKF_IRN<- lag(FBKF_IRN)
 InvGrowth_IRN<- (na.exclude(FBKF_IRN/laggedFBKF_IRN))-1
 InvGrowthLP_IRN<- mean(InvGrowth_IRN)
 
-FBKF_TUR<- subset(Datos, Country == "TUR")$FBKF
-laggedFBKF_TUR<- lag(FBKF_TUR)
-InvGrowth_TUR<- (na.exclude(FBKF_TUR/laggedFBKF_TUR))-1
-InvGrowthLP_TUR<- mean(InvGrowth_TUR)
+FBKF_THA<- subset(Datos, Country == "THA")$FBKF
+laggedFBKF_THA<- lag(FBKF_THA)
+InvGrowth_THA<- (na.exclude(FBKF_THA/laggedFBKF_THA))-1
+InvGrowthLP_THA<- mean(InvGrowth_THA)
 
 FBKF_SWZ<- subset(Datos, Country == "SWZ")$FBKF
 laggedFBKF_SWZ<- lag(FBKF_SWZ)  
 InvGrowth_SWZ<- (na.exclude(FBKF_SWZ/laggedFBKF_SWZ))-1
 InvGrowthLP_SWZ<- mean(InvGrowth_SWZ)
 
-cbind(InvGrowthLP_COL, InvGrowthLP_IRN, InvGrowthLP_TUR, InvGrowthLP_SWZ)
+cbind(InvGrowthLP_COL, InvGrowthLP_IRN, InvGrowthLP_THA, InvGrowthLP_SWZ)
 
 #Capital####
 K_COL[6]<- na.exclude(FBKF_COL/(InvGrowthLP_COL+Depre))[1]
@@ -52,9 +52,9 @@ for (i in 2:59) {
   i+1
 }
 
-K_TUR[27]<- na.exclude(FBKF_TUR/(InvGrowthLP_TUR+Depre))[1]
+K_THA[27]<- na.exclude(FBKF_THA/(InvGrowthLP_THA+Depre))[1]
 for (i in 28:59) {
-  K_TUR[i]<- K_TUR[i-1]*(1-Depre)+FBKF_TUR[i]
+  K_THA[i]<- K_THA[i-1]*(1-Depre)+FBKF_THA[i]
   i+1
 }
 
@@ -98,15 +98,15 @@ Reg2_IRN<- plm(log(Y_IRN)~I(sh79)+log(L_IRN)+log(K_IRN), data = Datos, model = "
 summary(Reg2_IRN)
 linearHypothesis(Reg2_IRN, "log(L_IRN)+log(K_IRN)=1")
 
-Y_TUR<- subset(Datos, Country=="TUR")$GDP
-L_TUR<- subset(Datos, Country=="TUR")$Pop
-Reg1_TUR<- plm(log(Y_TUR)~log(L_TUR)+log(K_TUR), data = Datos, model = "fd")
-summary(Reg1_TUR)
+Y_THA<- subset(Datos, Country=="THA")$GDP
+L_THA<- subset(Datos, Country=="THA")$Pop
+Reg1_THA<- plm(log(Y_THA)~log(L_THA)+log(K_THA), data = Datos, model = "fd")
+summary(Reg1_THA)
 
-cusum.prueba3 = efp(log(Y_TUR)~log(L_TUR)+log(K_TUR),type = "OLS-CUSUM")
+cusum.prueba3 = efp(log(Y_THA)~log(L_THA)+log(K_THA),type = "OLS-CUSUM")
 plot(cusum.prueba3)
-plot(log(K_TUR), type = "l")
-plot(log(Y_TUR), type = "l")
+plot(log(K_THA), type = "l")
+plot(log(Y_THA), type = "l")
 
 Y_SWZ<- subset(Datos, Country=="SWZ")$GDP
 L_SWZ<- subset(Datos, Country=="SWZ")$Pop
