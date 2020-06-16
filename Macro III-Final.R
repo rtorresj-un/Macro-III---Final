@@ -5,7 +5,8 @@ Datos <- read_delim(file.choose(),
                     ";", escape_double = FALSE, trim_ws = TRUE)
 View(Datos)
 
-library(plm); library(tidyverse); library(strucchange); library(car)
+library(plm); library(tidyverse); library(strucchange)
+library(car); library(tseries); library(lmtest); library(vars)
 Datos <- pdata.frame(Datos, index = c('Year', 'Country'))
 Datos <- Datos %>%
   group_by(Country)
@@ -85,6 +86,21 @@ sh99<- as.numeric(sh99)
 Reg2_COL<- plm(log(Y_COL)~I(sh99)+log(L_COL)+log(K_COL), data = Datos, model = "fd")
 summary(Reg2_COL)
 linearHypothesis(Reg2_COL, "log(L_COL)+log(K_COL)=1")
+
+Reg3_COL<- plm(diff(log(Y_COL))~I(sh99)[2:59]+diff(log(L_COL))+diff(log(K_COL)), data = Datos, model = "fd")
+summary(Reg3_COL)
+
+adf.test(log(Y_COL)); adf.test(na.exclude(log(K_COL))); adf.test(log(L_COL))
+plot(diff(log(K_COL)), type = "l")
+plot(diff(log(Y_COL)), type = "l")
+
+grangertest(log(Y_COL)~log(K_COL), order=1)
+grangertest(log(K_COL)~log(Y_COL), order=1)
+COL_varm<-data.frame(log(Y_COL)[6:59], log(K_COL)[6:59], log(L_COL)[6:59])
+VARselect(COL_var, lag.max=15)
+VAR_COL<-VAR(COL_varm,p=1)
+summary(VAR_COL)
+plot(VAR_COL)
 
 Y_IRN<- subset(Datos, Country=="IRN")$GDP
 L_IRN<- subset(Datos, Country=="IRN")$Pop
