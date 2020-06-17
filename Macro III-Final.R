@@ -3,13 +3,13 @@
 library(readr)
 Datos <- read_delim(file.choose(), 
                     ";", escape_double = FALSE, trim_ws = TRUE)
-View(Datos)
 
 library(plm); library(tidyverse); library(strucchange)
 library(car); library(tseries); library(lmtest); library(vars)
 Datos <- pdata.frame(Datos, index = c('Year', 'Country'))
 Datos <- Datos %>%
   group_by(Country)
+View(Datos)
 table(Datos$Country)
 table(Datos$Year)
 attach(Datos)
@@ -97,7 +97,7 @@ plot(diff(log(Y_COL)), type = "l")
 grangertest(log(Y_COL)~log(K_COL), order=1)
 grangertest(log(K_COL)~log(Y_COL), order=1)
 COL_varm<-data.frame(log(Y_COL)[6:59], log(K_COL)[6:59], log(L_COL)[6:59])
-VARselect(COL_var, lag.max=15)
+VARselect(COL_varm, lag.max=15)
 VAR_COL<-VAR(COL_varm,p=1)
 summary(VAR_COL)
 plot(VAR_COL)
@@ -149,7 +149,7 @@ GR_FBKF_COL<-NULL
 for (i in 7:59) {
   GR_FBKF_COL[i]<- FBKF_COL[i]/FBKF_COL[i-1]-1
   i+1
-}; GR_FBKF_COL<- ts(GR_FBKF_COL, start = 1965)
+}; GR_FBKF_COL<- ts(GR_FBKF_COL, start = 1960)
 
 plot.ts(GR_Y_COL, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 par(new=T)
@@ -165,7 +165,7 @@ GR_FBKF_IRN<-NULL
 for (i in 7:59) {
   GR_FBKF_IRN[i]<- FBKF_IRN[i]/FBKF_IRN[i-1]-1
   i+1
-}; GR_FBKF_IRN<- ts(GR_FBKF_IRN, start = 1965)
+}; GR_FBKF_IRN<- ts(GR_FBKF_IRN, start = 1960)
 
 plot.ts(GR_Y_IRN, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 par(new=T)
@@ -181,7 +181,7 @@ GR_FBKF_THA<-NULL
 for (i in 7:59) {
   GR_FBKF_THA[i]<- FBKF_THA[i]/FBKF_THA[i-1]-1
   i+1
-}; GR_FBKF_THA<- ts(GR_FBKF_THA, start = 1965)
+}; GR_FBKF_THA<- ts(GR_FBKF_THA, start = 1960)
 
 plot.ts(GR_Y_THA, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 par(new=T)
@@ -189,15 +189,15 @@ plot.ts(GR_FBKF_THA, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimie
 abline(a = 0,b = 0)
 
 GR_Y_SWZ<-NULL
-for (i in 2:59) {
+for (i in 11:59) {
   GR_Y_SWZ[i]<- Y_SWZ[i]/Y_SWZ[i-1]-1
   i+1
 }; GR_Y_SWZ<- ts(GR_Y_SWZ, start = 1960)
 GR_FBKF_SWZ<-NULL
-for (i in 7:59) {
+for (i in 11:59) {
   GR_FBKF_SWZ[i]<- FBKF_SWZ[i]/FBKF_SWZ[i-1]-1
   i+1
-}; GR_FBKF_SWZ<- ts(GR_FBKF_SWZ, start = 1965)
+}; GR_FBKF_SWZ<- ts(GR_FBKF_SWZ, start = 1960)
 
 plot.ts(GR_Y_SWZ, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 par(new=T)
