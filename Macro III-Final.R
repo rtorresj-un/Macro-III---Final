@@ -204,3 +204,48 @@ par(new=T)
 plot.ts(GR_FBKF_SWZ, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - SWZ')
 abline(a = 0,b = 0)
 
+#Cálculo de A####
+alpha_COL=1/3
+A_COL=(Y_COL/(K_COL^alpha_COL*L_COL^(1-alpha_COL)))^(1/(1-alpha_COL))
+A_COL<-ts(na.exclude(A_COL), start = 1965)
+ts.plot(A_COL)
+ts.plot(diff(log(A_COL)))
+
+A.f_COL <- hpfilter(A_COL,freq = 1)
+A.ft_COL<-hpf[["trend"]]
+A.fc_COL<-hpf[["cycle"]]
+plot(A.f_COL)
+
+alpha_IRN=1/3
+A_IRN=(Y_IRN/(K_IRN^alpha_IRN*L_IRN^(1-alpha_IRN)))^(1/(1-alpha_IRN))
+A_IRN<-ts(na.exclude(A_IRN), start = 1960)
+ts.plot(A_IRN)
+ts.plot(diff(log(A_IRN)))
+
+A.f_IRN <- hpfilter(A_IRN,freq = 1)
+A.ft_IRN<-hpf[["trend"]]
+A.fc_IRN<-hpf[["cycle"]]
+plot(A.f_IRN)
+
+alpha_THA=1/3
+A_THA=(Y_THA/(K_THA^alpha_THA*L_THA^(1-alpha_THA)))^(1/(1-alpha_THA))
+A_THA<-ts(na.exclude(A_THA), start = 1960)
+ts.plot(A_THA)
+ts.plot(diff(log(A_THA)))
+
+A.f_THA <- hpfilter(A_THA,freq = 1)
+A.ft_THA<-hpf[["trend"]]
+A.fc_THA<-hpf[["cycle"]]
+plot(A.f_THA)
+
+alpha_SWZ=1/3
+A_SWZ=(Y_SWZ/(K_SWZ^alpha_SWZ*L_SWZ^(1-alpha_SWZ)))^(1/(1-alpha_SWZ))
+A_SWZ<-ts(na.exclude(A_SWZ), start = 1970)
+ts.plot(A_SWZ)
+ts.plot(diff(log(A_SWZ)))
+
+A.f_SWZ <- hpfilter(A_SWZ,freq = 1)
+A.ft_SWZ<-hpf[["trend"]]
+A.fc_SWZ<-hpf[["cycle"]]
+plot(A.f_SWZ)
+
