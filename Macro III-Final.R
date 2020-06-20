@@ -17,7 +17,7 @@ attach(Datos)
 ##Calculando variables####
 Depre<- 0.05
 
-#Crecimiento de la inversi?n####
+#Crecimiento de la inversión####
 FBKF_COL<- subset(Datos, Country == "COL")$FBKF
 laggedFBKF_COL<- lag(FBKF_COL)  
 InvGrowth_COL<- (na.exclude(FBKF_COL/laggedFBKF_COL))-1
@@ -206,12 +206,12 @@ abline(a = 0,b = 0)
 
 #Cálculo de A####
 alpha_COL=1/3
-A_COL=(Y_COL/(K_COL^alpha_COL*L_COL^(1-alpha_COL)))^(1/(1-alpha_COL))
+A_COL=(Y_COL/(K_COL^(alpha_COL)*L_COL^(1-alpha_COL)))^(1/(1-alpha_COL))
 A_COL<-ts(na.exclude(A_COL), start = 1965)
 ts.plot(A_COL)
 ts.plot(diff(log(A_COL)))
 
-A.f_COL <- hpfilter(A_COL,freq = 1)
+A.f_COL <- hpfilter(A_COL, freq = 4)
 A.ft_COL<-A.f_COL[["trend"]]
 A.fc_COL<-A.f_COL[["cycle"]]
 plot(A.f_COL)
@@ -224,7 +224,7 @@ A_IRN<-ts(na.exclude(A_IRN), start = 1960)
 ts.plot(A_IRN)
 ts.plot(diff(log(A_IRN)))
 
-A.f_IRN <- hpfilter(A_IRN,freq = 1)
+A.f_IRN <- hpfilter(A_IRN,freq = 4)
 A.ft_IRN<-A.f_IRN[["trend"]]
 A.fc_IRN<-A.f_IRN[["cycle"]]
 plot(A.f_IRN)
@@ -237,7 +237,7 @@ A_THA<-ts(na.exclude(A_THA), start = 1960)
 ts.plot(A_THA)
 ts.plot(diff(log(A_THA)))
 
-A.f_THA <- hpfilter(A_THA,freq = 1)
+A.f_THA <- hpfilter(A_THA,freq = 4)
 A.ft_THA<-A.f_THA[["trend"]]
 A.fc_THA<-A.f_THA[["cycle"]]
 plot(A.f_THA)
@@ -250,10 +250,11 @@ A_SWZ<-ts(na.exclude(A_SWZ), start = 1970)
 ts.plot(A_SWZ)
 ts.plot(diff(log(A_SWZ)))
 
-A.f_SWZ <- hpfilter(A_SWZ,freq = 1)
+A.f_SWZ <- hpfilter(A_SWZ,freq = 4)
 A.ft_SWZ<-A.f_SWZ[["trend"]]
 A.fc_SWZ<-A.f_SWZ[["cycle"]]
 plot(A.f_SWZ)
 
 write.table(cbind(A.ft_SWZ,A.fc_SWZ) , file = "A.filtrado_SWZ.csv",sep = ";", row.names = F)
+
 
