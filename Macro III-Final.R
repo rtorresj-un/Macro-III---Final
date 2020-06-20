@@ -4,7 +4,7 @@ library(readr)
 Datos <- read_delim(file.choose(), 
                     ";", escape_double = FALSE, trim_ws = TRUE)
 
-library(plm); library(tidyverse); library(strucchange)
+library(plm); library(tidyverse); library(strucchange); library(mFilter)
 library(car); library(tseries); library(lmtest); library(vars)
 Datos <- pdata.frame(Datos, index = c('Year', 'Country'))
 Datos <- Datos %>%
@@ -212,9 +212,11 @@ ts.plot(A_COL)
 ts.plot(diff(log(A_COL)))
 
 A.f_COL <- hpfilter(A_COL,freq = 1)
-A.ft_COL<-hpf[["trend"]]
-A.fc_COL<-hpf[["cycle"]]
+A.ft_COL<-A.f_COL[["trend"]]
+A.fc_COL<-A.f_COL[["cycle"]]
 plot(A.f_COL)
+
+write.table(cbind(A.ft_COL,A.fc_COL) , file = "A.filtrado_COL.csv",sep = ";", row.names = F)
 
 alpha_IRN=1/3
 A_IRN=(Y_IRN/(K_IRN^alpha_IRN*L_IRN^(1-alpha_IRN)))^(1/(1-alpha_IRN))
@@ -223,9 +225,11 @@ ts.plot(A_IRN)
 ts.plot(diff(log(A_IRN)))
 
 A.f_IRN <- hpfilter(A_IRN,freq = 1)
-A.ft_IRN<-hpf[["trend"]]
-A.fc_IRN<-hpf[["cycle"]]
+A.ft_IRN<-A.f_IRN[["trend"]]
+A.fc_IRN<-A.f_IRN[["cycle"]]
 plot(A.f_IRN)
+
+write.table(cbind(A.ft_IRN,A.fc_IRN) , file = "A.filtrado_IRN.csv",sep = ";", row.names = F)
 
 alpha_THA=1/3
 A_THA=(Y_THA/(K_THA^alpha_THA*L_THA^(1-alpha_THA)))^(1/(1-alpha_THA))
@@ -234,9 +238,11 @@ ts.plot(A_THA)
 ts.plot(diff(log(A_THA)))
 
 A.f_THA <- hpfilter(A_THA,freq = 1)
-A.ft_THA<-hpf[["trend"]]
-A.fc_THA<-hpf[["cycle"]]
+A.ft_THA<-A.f_THA[["trend"]]
+A.fc_THA<-A.f_THA[["cycle"]]
 plot(A.f_THA)
+
+write.table(cbind(A.ft_THA,A.fc_THA) , file = "A.filtrado_THA.csv",sep = ";", row.names = F)
 
 alpha_SWZ=1/3
 A_SWZ=(Y_SWZ/(K_SWZ^alpha_SWZ*L_SWZ^(1-alpha_SWZ)))^(1/(1-alpha_SWZ))
@@ -245,7 +251,9 @@ ts.plot(A_SWZ)
 ts.plot(diff(log(A_SWZ)))
 
 A.f_SWZ <- hpfilter(A_SWZ,freq = 1)
-A.ft_SWZ<-hpf[["trend"]]
-A.fc_SWZ<-hpf[["cycle"]]
+A.ft_SWZ<-A.f_SWZ[["trend"]]
+A.fc_SWZ<-A.f_SWZ[["cycle"]]
 plot(A.f_SWZ)
+
+write.table(cbind(A.ft_SWZ,A.fc_SWZ) , file = "A.filtrado_SWZ.csv",sep = ";", row.names = F)
 
