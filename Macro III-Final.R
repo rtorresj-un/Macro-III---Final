@@ -151,12 +151,6 @@ for (i in 7:59) {
   i+1
 }; GR_FBKF_COL<- ts(GR_FBKF_COL, start = 1960)
 
-plot.ts(GR_Y_COL, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
-par(new=T)
-plot.ts(GR_FBKF_COL, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - COL')
-legend(x = "bottomright", legend = c("PIB", "I"), fill = c("#D60404C6", "#F07503C0"), title = "Crecimiento")
-abline(a = 0,b = 0)
-
 GRO_plot_COL<-autoplot(cbind(GR_Y_COL,GR_FBKF_COL), facets = F)
 GRO_plot_COL<- GRO_plot_COL + 
   ggtitle("Crecimiento del PIB e inversión - COL") +
@@ -236,8 +230,8 @@ print(GRO_plot_SWZ)
 alpha_COL=0.35
 A_COL=(Y_COL/(K_COL^(alpha_COL)*L_COL^(1-alpha_COL)))^(1/(1-alpha_COL))
 A_COL<-ts(na.exclude(A_COL), start = 1965)
-ts.plot(A_COL)
-ts.plot(diff(log(A_COL)))
+autoplot(A_COL, main='A - COL')
+autoplot(diff(log(A_COL)), main='Crecimiento de A - COL')
 
 A.f_COL <- hpfilter(A_COL, freq = 4)
 A.ft_COL<-A.f_COL[["trend"]]
@@ -250,8 +244,8 @@ write.table(cbind(A.ft_COL,A.fc_COL) , file = "A.filtrado_COL.csv",sep = ";", ro
 alpha_IRN=0.234
 A_IRN=(Y_IRN/(K_IRN^alpha_IRN*L_IRN^(1-alpha_IRN)))^(1/(1-alpha_IRN))
 A_IRN<-ts(na.exclude(A_IRN), start = 1960)
-ts.plot(A_IRN)
-ts.plot(diff(log(A_IRN)))
+autoplot(A_IRN, main='A - IRN')
+autoplot(diff(log(A_IRN)), main='Crecimiento de A - IRN')
 
 A.f_IRN <- hpfilter(A_IRN,freq = 4)
 A.ft_IRN<-A.f_IRN[["trend"]]
@@ -265,8 +259,8 @@ write.table(cbind(A.ft_IRN,A.fc_IRN) , file = "A.filtrado_IRN.csv",sep = ";", ro
 alpha_THA=0.2829
 A_THA=(Y_THA/(K_THA^alpha_THA*L_THA^(1-alpha_THA)))^(1/(1-alpha_THA))
 A_THA<-ts(na.exclude(A_THA), start = 1960)
-ts.plot(A_THA)
-ts.plot(diff(log(A_THA)))
+autoplot(A_THA, main='A - THA')
+autoplot(diff(log(A_THA)), main='Crecimiento de A - THA')
 
 A.f_THA <- hpfilter(A_THA,freq = 4)
 A.ft_THA<-A.f_THA[["trend"]]
@@ -280,8 +274,8 @@ write.table(cbind(A.ft_THA,A.fc_THA) , file = "A.filtrado_THA.csv",sep = ";", ro
 alpha_SWZ=0.24
 A_SWZ=(Y_SWZ/(K_SWZ^alpha_SWZ*L_SWZ^(1-alpha_SWZ)))^(1/(1-alpha_SWZ))
 A_SWZ<-ts(na.exclude(A_SWZ), start = 1970)
-ts.plot(A_SWZ)
-ts.plot(diff(log(A_SWZ)))
+autoplot(A_SWZ, main='A - SWZ')
+autoplot(diff(log(A_SWZ)), main='Crecimiento de A - SWZ')
 
 A.f_SWZ <- hpfilter(A_SWZ,freq = 4)
 A.ft_SWZ<-A.f_SWZ[["trend"]]
@@ -292,4 +286,68 @@ autoplot(A.fc_SWZ, main='Componente cíclico de A para SWZ', ts.colour = c("#B22
 
 write.table(cbind(A.ft_SWZ,A.fc_SWZ) , file = "A.filtrado_SWZ.csv",sep = ";", row.names = F)
 
+#Estado estacionario####
+s_COL=mean(na.exclude(FBKF_COL/Y_COL))
+n_COL=mean(na.exclude(L_COL/lag(L_COL)-1))
+g_COL=mean(na.exclude(as.numeric(A.ft_COL)/lag(as.numeric(A.ft_COL))-1))
+K_EE_COL=A.ft_COL*(s_COL/(Depre+g_COL+n_COL))^(1/(1-alpha_COL))
+Y_EE_COL=A.ft_COL*(s_COL/(Depre+g_COL+n_COL))^(alpha_COL/(1-alpha_COL))
 
+Kpercap_COL<-K_COL/L_COL
+K_plot_COL<-autoplot(cbind(Kpercap_COL[6:59],K_EE_COL), facets = F)
+K_plot_COL<- K_plot_COL + 
+  ggtitle("Comparación de K - COL") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("k^*","k"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(K_plot_COL)
+
+s_IRN=mean(na.exclude(FBKF_IRN/Y_IRN))
+n_IRN=mean(na.exclude(L_IRN/lag(L_IRN)-1))
+g_IRN=mean(na.exclude(as.numeric(A.ft_IRN)/lag(as.numeric(A.ft_IRN))-1))
+K_EE_IRN=A.ft_IRN*(s_IRN/(Depre+g_IRN+n_IRN))^(1/(1-alpha_IRN))
+Y_EE_IRN=A.ft_IRN*(s_IRN/(Depre+g_IRN+n_IRN))^(alpha_IRN/(1-alpha_IRN))
+
+Kpercap_IRN<-K_IRN/L_IRN
+K_plot_IRN<-autoplot(cbind(Kpercap_IRN,K_EE_IRN), facets = F)
+K_plot_IRN<- K_plot_IRN + 
+  ggtitle("Comparación de K - IRN") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("k^*","k"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(K_plot_IRN)
+
+s_THA=mean(na.exclude(FBKF_THA/Y_THA))
+n_THA=mean(na.exclude(L_THA/lag(L_THA)-1))
+g_THA=mean(na.exclude(as.numeric(A.ft_THA)/lag(as.numeric(A.ft_THA))-1))
+K_EE_THA=A.ft_THA*(s_THA/(Depre+g_THA+n_THA))^(1/(1-alpha_THA))
+Y_EE_THA=A.ft_THA*(s_THA/(Depre+g_THA+n_THA))^(alpha_THA/(1-alpha_THA))
+
+Kpercap_THA<-K_THA/L_THA
+K_plot_THA<-autoplot(cbind(Kpercap_THA,K_EE_THA), facets = F)
+K_plot_THA<- K_plot_THA + 
+  ggtitle("Comparación de K - THA") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("k^*","k"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(K_plot_THA)
+
+s_SWZ=mean(na.exclude(FBKF_SWZ/Y_SWZ))
+n_SWZ=mean(na.exclude(L_SWZ[11:59]/lag(L_SWZ[11:59])-1))
+g_SWZ=mean(na.exclude(as.numeric(A.ft_SWZ)/lag(as.numeric(A.ft_SWZ))-1))
+K_EE_SWZ=A.ft_SWZ*(s_SWZ/(Depre+g_SWZ+n_SWZ))^(1/(1-alpha_SWZ))
+Y_EE_SWZ=A.ft_SWZ*((s_SWZ/(Depre+g_SWZ+n_SWZ))^(alpha_SWZ/(1-alpha_SWZ)))
+
+Kpercap_SWZ<-K_SWZ/L_SWZ
+K_plot_SWZ<-autoplot(cbind(Kpercap_SWZ[11:59],K_EE_SWZ), facets = F)
+K_plot_SWZ<- K_plot_SWZ + 
+  ggtitle("Comparación de K - SWZ") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("k^*","k"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(K_plot_SWZ)
+  
