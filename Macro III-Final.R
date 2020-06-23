@@ -156,7 +156,7 @@ GRO_plot_COL<- GRO_plot_COL +
   ggtitle("Crecimiento del PIB e inversión - COL") +
   guides(fill=FALSE) +
   labs(colour = "Crecimiento") +
-  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#F07503C0")) +
+  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#483D8B")) +
   theme(legend.position="bottom") + geom_abline(aes(slope = 0, intercept = 0), colour=c("#03030377"))
 print(GRO_plot_COL)
 
@@ -176,7 +176,7 @@ GRO_plot_IRN<- GRO_plot_IRN +
   ggtitle("Crecimiento del PIB e inversión - IRN") +
   guides(fill=FALSE) +
   labs(colour = "Crecimiento") +
-  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#F07503C0")) +
+  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#483D8B")) +
   theme(legend.position="bottom") + geom_abline(aes(slope = 0, intercept = 0), colour=c("#03030377"))
 print(GRO_plot_IRN)
 
@@ -196,7 +196,7 @@ GRO_plot_THA<- GRO_plot_THA +
   ggtitle("Crecimiento del PIB e inversión - THA") +
   guides(fill=FALSE) +
   labs(colour = "Crecimiento") +
-  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#F07503C0")) +
+  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#483D8B")) +
   theme(legend.position="bottom") + geom_abline(aes(slope = 0, intercept = 0), colour=c("#03030377"))
 print(GRO_plot_THA)
 
@@ -213,8 +213,8 @@ for (i in 2:54) {
 
 #plot.ts(GR_Y_SWZ, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 #par(new=T)
-#plot.ts(GR_FBKF_SWZ, type='l', col=c("#F07503C0"), ylab = NULL, main = 'Crecimiento del PIB e inversión - SWZ')
-#legend(x = "bottomright", legend = c("PIB", "I"), fill = c("#D60404C6", "#F07503C0"), title = "Crecimiento")
+#plot.ts(GR_FBKF_SWZ, type='l', col=c("#483D8B"), ylab = NULL, main = 'Crecimiento del PIB e inversión - SWZ')
+#legend(x = "bottomright", legend = c("PIB", "I"), fill = c("#D60404C6", "#483D8B"), title = "Crecimiento")
 #abline(a = 0,b = 0)
 
 GRO_plot_SWZ<-autoplot(cbind(GR_Y_SWZ,GR_FBKF_SWZ), facets = F)
@@ -222,7 +222,7 @@ GRO_plot_SWZ<- GRO_plot_SWZ +
   ggtitle("Crecimiento del PIB e inversión - SWZ") +
   guides(fill=FALSE) +
   labs(colour = "Crecimiento") +
-  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#F07503C0")) +
+  scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#483D8B")) +
   theme(legend.position="bottom") + geom_abline(aes(slope = 0, intercept = 0), colour=c("#03030377"))
 print(GRO_plot_SWZ)
 
@@ -300,6 +300,16 @@ K_plot_COL<- K_plot_COL +
   theme(legend.position="bottom")
 print(K_plot_COL)
 
+Ypercap_COL<-subset(Datos, Country=="COL")$GDPcap
+Y_plot_COL<-autoplot(cbind(Ypercap_COL,Y_EE_COL), facets = F)
+Y_plot_COL<- Y_plot_COL + 
+  ggtitle("Comparación de Y - COL") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("y^*","y"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(Y_plot_COL)
+
 s_IRN=mean(na.exclude(FBKF_IRN/Y_IRN))
 n_IRN=mean(na.exclude(L_IRN/lag(L_IRN)-1))
 g_IRN=mean(na.exclude(as.numeric(A.ft_IRN)/lag(as.numeric(A.ft_IRN))-1))
@@ -315,6 +325,16 @@ K_plot_IRN<- K_plot_IRN +
   scale_color_manual(labels = c("k^*","k"), values = c("#8B2500", "#EE0000")) +
   theme(legend.position="bottom")
 print(K_plot_IRN)
+
+Ypercap_IRN<-subset(Datos, Country=="IRN")$GDPcap
+Y_plot_IRN<-autoplot(cbind(Ypercap_IRN,Y_EE_IRN), facets = F)
+Y_plot_IRN<- Y_plot_IRN + 
+  ggtitle("Comparación de Y - IRN") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("y^*","y"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(Y_plot_IRN)
 
 s_THA=mean(na.exclude(FBKF_THA/Y_THA))
 n_THA=mean(na.exclude(L_THA/lag(L_THA)-1))
@@ -332,6 +352,16 @@ K_plot_THA<- K_plot_THA +
   theme(legend.position="bottom")
 print(K_plot_THA)
 
+Ypercap_THA<-subset(Datos, Country=="THA")$GDPcap
+Y_plot_THA<-autoplot(cbind(Ypercap_THA,Y_EE_THA), facets = F)
+Y_plot_THA<- Y_plot_THA + 
+  ggtitle("Comparación de Y - THA") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("y^*","y"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(Y_plot_THA)
+
 s_SWZ=mean(na.exclude(FBKF_SWZ/Y_SWZ))
 n_SWZ=mean(na.exclude(L_SWZ/lag(L_SWZ)-1))
 g_SWZ=mean(na.exclude(as.numeric(A.ft_SWZ)/lag(as.numeric(A.ft_SWZ))-1))
@@ -347,4 +377,14 @@ K_plot_SWZ<- K_plot_SWZ +
   scale_color_manual(labels = c("k^*","k"), values = c("#8B2500", "#EE0000")) +
   theme(legend.position="bottom")
 print(K_plot_SWZ)
-  
+
+Ypercap_SWZ<-subset(Datos, Country=="SWZ")$GDPcap
+Y_plot_SWZ<-autoplot(cbind(Ypercap_SWZ,Y_EE_SWZ), facets = F)
+Y_plot_SWZ<- Y_plot_SWZ + 
+  ggtitle("Comparación de Y - SWZ") +
+  guides(fill=FALSE) +
+  labs(colour = "Tipos") +
+  scale_color_manual(labels = c("y^*","y"), values = c("#8B2500", "#EE0000")) +
+  theme(legend.position="bottom")
+print(Y_plot_SWZ)
+
