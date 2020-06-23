@@ -42,29 +42,29 @@ cbind(InvGrowthLP_COL, InvGrowthLP_IRN, InvGrowthLP_THA, InvGrowthLP_SWZ)
 
 #Capital####
 K_COL<- NULL
-K_COL[6]<- na.exclude(FBKF_COL/(InvGrowthLP_COL+Depre))[1]
-for (i in 7:59) {
+K_COL[1]<- na.exclude(FBKF_COL/(InvGrowthLP_COL+Depre))[1]
+for (i in 2:54) {
   K_COL[i]<- K_COL[i-1]*(1-Depre)+FBKF_COL[i]
   i+1
 }
 
 K_IRN<- NULL
 K_IRN[1]<- na.exclude(FBKF_IRN/(InvGrowthLP_IRN+Depre))[1]
-for (i in 2:59) {
+for (i in 2:54) {
   K_IRN[i]<- K_IRN[i-1]*(1-Depre)+FBKF_IRN[i]
   i+1
 }
 
 K_THA<- NULL
 K_THA[1]<- na.exclude(FBKF_THA/(InvGrowthLP_THA+Depre))[1]
-for (i in 2:59) {
+for (i in 2:54) {
   K_THA[i]<- K_THA[i-1]*(1-Depre)+FBKF_THA[i]
   i+1
 }
 
 K_SWZ <- NULL
-K_SWZ[11]<- na.exclude(FBKF_SWZ/(InvGrowthLP_SWZ+Depre))[1]
-for (i in 12:59) {
+K_SWZ[1]<- na.exclude(FBKF_SWZ/(InvGrowthLP_SWZ+Depre))[1]
+for (i in 2:54) {
   K_SWZ[i]<- K_SWZ[i-1]*(1-Depre)+FBKF_SWZ[i]
   i+1
 }
@@ -141,15 +141,15 @@ linearHypothesis(Reg1_SWZ, "log(L_SWZ)+log(K_SWZ)=1")
 
 #Crecimiento de la inversión, producto y capital####
 GR_Y_COL<-NULL
-for (i in 2:59) {
+for (i in 2:54) {
   GR_Y_COL[i]<- Y_COL[i]/Y_COL[i-1]-1
   i+1
-}; GR_Y_COL<- ts(GR_Y_COL, start = 1960)
+}; GR_Y_COL<- ts(GR_Y_COL, start = 1965)
 GR_FBKF_COL<-NULL
-for (i in 7:59) {
+for (i in 2:54) {
   GR_FBKF_COL[i]<- FBKF_COL[i]/FBKF_COL[i-1]-1
   i+1
-}; GR_FBKF_COL<- ts(GR_FBKF_COL, start = 1960)
+}; GR_FBKF_COL<- ts(GR_FBKF_COL, start = 1965)
 
 GRO_plot_COL<-autoplot(cbind(GR_Y_COL,GR_FBKF_COL), facets = F)
 GRO_plot_COL<- GRO_plot_COL + 
@@ -157,19 +157,19 @@ GRO_plot_COL<- GRO_plot_COL +
   guides(fill=FALSE) +
   labs(colour = "Crecimiento") +
   scale_color_manual(labels = c("I", "PIB"), values = c("#D60404C6", "#F07503C0")) +
-  theme(legend.position="bottom")
+  theme(legend.position="bottom") + geom_abline(aes(slope = 0, intercept = 0), colour=c("#03030377"))
 print(GRO_plot_COL)
 
 GR_Y_IRN<-NULL
-for (i in 2:59) {
+for (i in 2:54) {
   GR_Y_IRN[i]<- Y_IRN[i]/Y_IRN[i-1]-1
   i+1
-}; GR_Y_IRN<- ts(GR_Y_IRN, start = 1960)
+}; GR_Y_IRN<- ts(GR_Y_IRN, start = 1965)
 GR_FBKF_IRN<-NULL
-for (i in 2:59) {
+for (i in 2:54) {
   GR_FBKF_IRN[i]<- FBKF_IRN[i]/FBKF_IRN[i-1]-1
   i+1
-}; GR_FBKF_IRN<- ts(GR_FBKF_IRN, start = 1960)
+}; GR_FBKF_IRN<- ts(GR_FBKF_IRN, start = 1965)
 
 GRO_plot_IRN<-autoplot(cbind(GR_Y_IRN,GR_FBKF_IRN), facets = F)
 GRO_plot_IRN<- GRO_plot_IRN + 
@@ -181,15 +181,15 @@ GRO_plot_IRN<- GRO_plot_IRN +
 print(GRO_plot_IRN)
 
 GR_Y_THA<-NULL
-for (i in 2:59) {
+for (i in 2:54) {
   GR_Y_THA[i]<- Y_THA[i]/Y_THA[i-1]-1
   i+1
-}; GR_Y_THA<- ts(GR_Y_THA, start = 1960)
+}; GR_Y_THA<- ts(GR_Y_THA, start = 1965)
 GR_FBKF_THA<-NULL
-for (i in 2:59) {
+for (i in 2:54) {
   GR_FBKF_THA[i]<- FBKF_THA[i]/FBKF_THA[i-1]-1
   i+1
-}; GR_FBKF_THA<- ts(GR_FBKF_THA, start = 1960)
+}; GR_FBKF_THA<- ts(GR_FBKF_THA, start = 1965)
 
 GRO_plot_THA<-autoplot(cbind(GR_Y_THA,GR_FBKF_THA), facets = F)
 GRO_plot_THA<- GRO_plot_THA + 
@@ -201,15 +201,15 @@ GRO_plot_THA<- GRO_plot_THA +
 print(GRO_plot_THA)
 
 GR_Y_SWZ<-NULL
-for (i in 11:59) {
+for (i in 2:54) {
   GR_Y_SWZ[i]<- Y_SWZ[i]/Y_SWZ[i-1]-1
   i+1
-}; GR_Y_SWZ<- ts(GR_Y_SWZ, start = 1960)
+}; GR_Y_SWZ<- ts(GR_Y_SWZ, start = 1965)
 GR_FBKF_SWZ<-NULL
-for (i in 11:59) {
+for (i in 2:54) {
   GR_FBKF_SWZ[i]<- FBKF_SWZ[i]/FBKF_SWZ[i-1]-1
   i+1
-}; GR_FBKF_SWZ<- ts(GR_FBKF_SWZ, start = 1960)
+}; GR_FBKF_SWZ<- ts(GR_FBKF_SWZ, start = 1965)
 
 #plot.ts(GR_Y_SWZ, type='l', col=c("#D60404C6"), ylab = NULL, axes = F)
 #par(new=T)
@@ -243,14 +243,13 @@ write.table(cbind(A.ft_COL,A.fc_COL) , file = "A.filtrado_COL.csv",sep = ";", ro
 
 alpha_IRN=0.234
 A_IRN=(Y_IRN/(K_IRN^alpha_IRN*L_IRN^(1-alpha_IRN)))^(1/(1-alpha_IRN))
-A_IRN<-ts(na.exclude(A_IRN), start = 1960)
+A_IRN<-ts(na.exclude(A_IRN), start = 1965)
 autoplot(A_IRN, main='A - IRN')
 autoplot(diff(log(A_IRN)), main='Crecimiento de A - IRN')
 
 A.f_IRN <- hpfilter(A_IRN,freq = 4)
 A.ft_IRN<-A.f_IRN[["trend"]]
 A.fc_IRN<-A.f_IRN[["cycle"]]
-plot(A.f_IRN)
 autoplot(A.ft_IRN, main='A para IRN', ts.colour = c("#B22222"))
 autoplot(A.fc_IRN, main='Componente cíclico de A para IRN', ts.colour = c("#B22222"))
 
@@ -258,14 +257,13 @@ write.table(cbind(A.ft_IRN,A.fc_IRN) , file = "A.filtrado_IRN.csv",sep = ";", ro
 
 alpha_THA=0.2829
 A_THA=(Y_THA/(K_THA^alpha_THA*L_THA^(1-alpha_THA)))^(1/(1-alpha_THA))
-A_THA<-ts(na.exclude(A_THA), start = 1960)
+A_THA<-ts(na.exclude(A_THA), start = 1965)
 autoplot(A_THA, main='A - THA')
 autoplot(diff(log(A_THA)), main='Crecimiento de A - THA')
 
 A.f_THA <- hpfilter(A_THA,freq = 4)
 A.ft_THA<-A.f_THA[["trend"]]
 A.fc_THA<-A.f_THA[["cycle"]]
-plot(A.f_THA)
 autoplot(A.ft_THA, main='A para THA', ts.colour = c("#B22222"))
 autoplot(A.fc_THA, main='Componente cíclico de A para THA', ts.colour = c("#B22222"))
 
@@ -273,14 +271,13 @@ write.table(cbind(A.ft_THA,A.fc_THA) , file = "A.filtrado_THA.csv",sep = ";", ro
 
 alpha_SWZ=0.24
 A_SWZ=(Y_SWZ/(K_SWZ^alpha_SWZ*L_SWZ^(1-alpha_SWZ)))^(1/(1-alpha_SWZ))
-A_SWZ<-ts(na.exclude(A_SWZ), start = 1970)
+A_SWZ<-ts(na.exclude(A_SWZ), start = 1965)
 autoplot(A_SWZ, main='A - SWZ')
 autoplot(diff(log(A_SWZ)), main='Crecimiento de A - SWZ')
 
 A.f_SWZ <- hpfilter(A_SWZ,freq = 4)
 A.ft_SWZ<-A.f_SWZ[["trend"]]
 A.fc_SWZ<-A.f_SWZ[["cycle"]]
-plot(A.f_SWZ)
 autoplot(A.ft_SWZ, main='A para SWZ', ts.colour = c("#B22222"))
 autoplot(A.fc_SWZ, main='Componente cíclico de A para SWZ', ts.colour = c("#B22222"))
 
@@ -294,7 +291,7 @@ K_EE_COL=A.ft_COL*(s_COL/(Depre+g_COL+n_COL))^(1/(1-alpha_COL))
 Y_EE_COL=A.ft_COL*(s_COL/(Depre+g_COL+n_COL))^(alpha_COL/(1-alpha_COL))
 
 Kpercap_COL<-K_COL/L_COL
-K_plot_COL<-autoplot(cbind(Kpercap_COL[6:59],K_EE_COL), facets = F)
+K_plot_COL<-autoplot(cbind(Kpercap_COL,K_EE_COL), facets = F)
 K_plot_COL<- K_plot_COL + 
   ggtitle("Comparación de K - COL") +
   guides(fill=FALSE) +
@@ -336,13 +333,13 @@ K_plot_THA<- K_plot_THA +
 print(K_plot_THA)
 
 s_SWZ=mean(na.exclude(FBKF_SWZ/Y_SWZ))
-n_SWZ=mean(na.exclude(L_SWZ[11:59]/lag(L_SWZ[11:59])-1))
+n_SWZ=mean(na.exclude(L_SWZ/lag(L_SWZ)-1))
 g_SWZ=mean(na.exclude(as.numeric(A.ft_SWZ)/lag(as.numeric(A.ft_SWZ))-1))
 K_EE_SWZ=A.ft_SWZ*(s_SWZ/(Depre+g_SWZ+n_SWZ))^(1/(1-alpha_SWZ))
 Y_EE_SWZ=A.ft_SWZ*((s_SWZ/(Depre+g_SWZ+n_SWZ))^(alpha_SWZ/(1-alpha_SWZ)))
 
 Kpercap_SWZ<-K_SWZ/L_SWZ
-K_plot_SWZ<-autoplot(cbind(Kpercap_SWZ[11:59],K_EE_SWZ), facets = F)
+K_plot_SWZ<-autoplot(cbind(Kpercap_SWZ,K_EE_SWZ), facets = F)
 K_plot_SWZ<- K_plot_SWZ + 
   ggtitle("Comparación de K - SWZ") +
   guides(fill=FALSE) +
